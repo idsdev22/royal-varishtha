@@ -69,13 +69,18 @@ export async function submitLead(leadData = {}) {
   const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
   const timestamp = new Date().toISOString();
 
-  // 1. CRM Payload (matches newDvmAPi expectations)
+  // 1. CRM Payload (matches newDvmAPi expectations + aliases for compatibility)
   const crmPayload = {
     fullName: name,
+    name: name,
     phoneNumber: cleanPhone,
+    phone: cleanPhone,
     address: address,
+    city: city,
     projectName: PROJECT_NAME,
-    leadSource: leadSource
+    project: PROJECT_NAME,
+    leadSource: LEAD_SOURCE,
+    source: LEAD_SOURCE
   };
 
   // 2. Google Sheets & Email Payload
