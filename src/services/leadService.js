@@ -1,27 +1,26 @@
-// Google Apps Script Web App Endpoint for Dream Villa Makers Leads
-export const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz5Z1i41jlVMhbWgvLQPRTwZ6eabKS_WwqMzEkWsqXelC7xnUNydRgqlaAR2oNCOBZZ/exec';
+
+export const GOOGLE_SCRIPT_URL =
+  'https://script.google.com/macros/s/AKfycbz5Z1i41jlVMhbWgvLQPRTwZ6eabKS_WwqMzEkWsqXelC7xnUNydRgqlaAR2oNCOBZZ/exec';
 
 /**
- * Submits lead data to Google Sheets & triggers automated email alert.
- * 
- * @param {Object} leadData
- * @param {string} leadData.name - Customer full name
- * @param {string} leadData.phone - 10-digit mobile number
- * @param {string} [leadData.city] - Customer city
- * @param {string} [leadData.source] - Lead source or enquiry context (e.g. Hero Banner, Brochure Download)
+ * Submit a lead to Google Sheets, Firebase CRM,
+ * and trigger an email notification via Apps Script.
  */
 export async function submitLead(leadData) {
   const payload = {
-    name: leadData.name?.trim() || '',
-    phone: leadData.phone?.trim() || '',
-    city: leadData.city?.trim() || '',
-    source: leadData.source || 'General Enquiry',
-    pageUrl: window.location.href,
-    timestamp: new Date().toISOString()
+    name: String(leadData.name || '').trim(),
+    phone: String(leadData.phone || '').trim(),
+    city: String(leadData.city || '').trim()
   };
 
+  if (!payload.name || !payload.phone) {
+    return {
+      success: false,
+      message: 'Name and phone number are required.'
+    };
+  }
+
   try {
-    // Note: mode: 'no-cors' is required for Google Apps Script Web Apps to prevent browser CORS blocks
     await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
@@ -31,9 +30,18 @@ export async function submitLead(leadData) {
       body: JSON.stringify(payload)
     });
 
-    return { success: true };
+    // With no-cors, the actual server response cannot be read.
+    // This only confirms that fetch did not throw an error.
+    return {
+      success: true,
+      message: 'Enquiry submitted.'
+    };
   } catch (error) {
-    console.error('Failed to submit lead to Google Sheets:', error);
-    return { success: false, error };
+    console.error('Failed to submit website enquiry:', error);
+
+    return {
+      success: false,
+      message: 'Unable to submit your enquiry. Please try again.'
+    };
   }
 }
