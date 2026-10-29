@@ -1,12 +1,12 @@
 
 export const GOOGLE_SCRIPT_URL =
-  'https://script.google.com/macros/s/AKfycbxc20XhXongjUZhCoMz48NnKJprP8dMT1Za8rbk-RAMhwDuqkiglLgj9VgshaD4duFt/exec';
+  'https://script.google.com/macros/s/AKfycbzQC642_gA1ginVYh3bn0-m40L4eUQbO1xUKief2mmei4vlFW9spa9t1lEgrr0v2xsA/exec';
 
 /**
  * Submit a lead to Google Sheets, Firebase CRM,
- * and trigger an email notification via Apps Script.
+ * and email notifications through Google Apps Script.
  */
-export async function submitLead(leadData) {
+export async function submitLead(leadData = {}) {
   const payload = {
     name: String(leadData.name || '').trim(),
     phone: String(leadData.phone || '').trim(),
@@ -30,14 +30,17 @@ export async function submitLead(leadData) {
       body: JSON.stringify(payload)
     });
 
-    // With no-cors, the actual server response cannot be read.
-    // This only confirms that fetch did not throw an error.
+    // no-cors does not expose the Apps Script response.
+    // This does not guarantee that Sheets or CRM saved the lead.
     return {
       success: true,
-      message: 'Enquiry submitted.'
+      message: 'Your enquiry has been submitted.'
     };
   } catch (error) {
-    console.error('Failed to submit website enquiry:', error);
+    console.error(
+      'Failed to submit website enquiry:',
+      error
+    );
 
     return {
       success: false,
