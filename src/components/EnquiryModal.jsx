@@ -50,8 +50,9 @@ export const EnquiryModal = ({ isOpen, onClose, initialData = {} }) => {
       alert('Please fill in your name and phone number.');
       return;
     }
-    if (formData.phone.length !== 10) {
-      alert('Please enter a valid 10-digit mobile number.');
+    const cleanPhone = formData.phone.replace(/[\s()-]/g, '');
+    if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
+      alert('Please enter a valid 10-digit mobile number starting with 6, 7, 8, or 9.');
       return;
     }
 
@@ -62,8 +63,12 @@ export const EnquiryModal = ({ isOpen, onClose, initialData = {} }) => {
     try {
       await submitLead({
         name: formData.name.trim(),
-        phone: formData.phone,
+        fullName: formData.name.trim(),
+        phone: cleanPhone,
+        phoneNumber: cleanPhone,
         city: formData.city.trim(),
+        address: formData.city.trim(),
+        leadSource: 'Google Ads',
         source: sourceContext
       });
       try {
