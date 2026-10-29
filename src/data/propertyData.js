@@ -112,8 +112,8 @@ export const propertyData = {
     highlightsList: [
 
     ],
-    imagePrimary: img1,
-    imageSecondary: img3
+    imagePrimary: img5,
+    imageSecondary: img5
   },
 
   // --- PLOT CONFIGURATIONS & PRICING ---
