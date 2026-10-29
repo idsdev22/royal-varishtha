@@ -1,6 +1,6 @@
 
 export const GOOGLE_SCRIPT_URL =
-  'https://script.google.com/macros/s/AKfycbz5Z1i41jlVMhbWgvLQPRTwZ6eabKS_WwqMzEkWsqXelC7xnUNydRgqlaAR2oNCOBZZ/exec';
+  'https://script.google.com/macros/s/AKfycbxc20XhXongjUZhCoMz48NnKJprP8dMT1Za8rbk-RAMhwDuqkiglLgj9VgshaD4duFt/exec';
 
 /**
  * Submit a lead to Google Sheets, Firebase CRM,
