@@ -61,8 +61,8 @@ export const propertyData = {
     whatsappMessage: "Hello! I am interested in Royal Varishtaa premium DTCP plots in Kurumbapalayam. Please share plot availability, layout plan, and price details.",
     email: "sales@ananyahomes.in",
     officeAddress: "Royal Varishtaa Site Experience Centre, Kurumbapalayam, Coimbatore - 641107",
-    googleMapUrl: "https://maps.google.com/?q=Kurumbapalayam+Coimbatore",
-    googleMapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3915.289196960144!2d77.01420787504655!3d11.091702489076805!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba8f81014e7a8fb%3A0xe54e60b299e527d2!2sKurumbapalayam%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+    googleMapUrl: "https://maps.app.goo.gl/f24jeYnJuS59ZNHn8",
+    googleMapEmbed: "https://maps.google.com/maps?q=11.1154719,77.0392968&t=&z=15&ie=UTF8&iwloc=&output=embed"
   },
 
   // --- HERO BANNER CONFIGURATION ---

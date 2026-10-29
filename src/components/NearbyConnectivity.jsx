@@ -77,6 +77,21 @@ export const NearbyConnectivity = ({ onOpenEnquiry }) => {
           })}
         </div>
 
+        {/* Interactive Google Map Location */}
+        <div className="nearby-map-embed-wrapper">
+          <iframe
+            src={projectInfo.googleMapEmbed}
+            title="Royal Varishtaa Google Map Location"
+            width="100%"
+            height="380"
+            style={{ border: 0 }}
+            allowFullScreen=""
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="nearby-map-iframe"
+          />
+        </div>
+
         {/* Location Advantage Map Action Bar */}
         <div className="nearby-map-action-card">
           <div className="map-action-info">
