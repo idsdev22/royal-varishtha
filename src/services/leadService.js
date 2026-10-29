@@ -13,7 +13,7 @@ export const GOOGLE_SCRIPT_URL =
   'https://script.google.com/macros/s/AKfycbxeyE8NTVxZWHlAWHVfmhQU-2Nmp-OwO4yCB11FB9ZuOG9T7MzRsOP05M_-oI8trWwi/exec';
 
 export const PROJECT_NAME = 'Royal Varishtaa';
-export const DEFAULT_LEAD_SOURCE = 'Google Ads';
+export const LEAD_SOURCE = 'Google Ads';
 
 /**
  * Submit enquiry to both Firebase CRM and Google Apps Script.
@@ -23,8 +23,6 @@ export const DEFAULT_LEAD_SOURCE = 'Google Ads';
  * @param {string} leadData.phone - Mobile number
  * @param {string} [leadData.city] - City
  * @param {string} [leadData.address] - Address
- * @param {string} [leadData.source] - Lead source context
- * @param {string} [leadData.leadSource] - Campaign source
  *
  * @returns {Promise<{success: boolean, message?: string, error?: string}>}
  */
@@ -43,11 +41,7 @@ export async function submitLead(leadData = {}) {
 
   const city = String(leadData?.city || '').trim();
   const address = String(leadData?.address || city || 'No address').trim();
-  const leadSource = String(
-    leadData?.source ||
-    leadData?.leadSource ||
-    DEFAULT_LEAD_SOURCE
-  ).trim();
+  const leadSource = LEAD_SOURCE;
 
   // Validate required fields
   if (!name) {
