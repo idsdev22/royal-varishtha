@@ -1,6 +1,6 @@
 
 export const GOOGLE_SCRIPT_URL =
-  'https://script.google.com/macros/s/AKfycbw-XAMHQE_1iMVH05z1KM5DGRjuOh_CXMoAXZ4dwKdb5F5qBrDiUI_BfVCy3xsqgc50/exec';
+  'https://script.google.com/macros/s/AKfycbxeyE8NTVxZWHlAWHVfmhQU-2Nmp-OwO4yCB11FB9ZuOG9T7MzRsOP05M_-oI8trWwi/exec';
 
 /**
  * Submit a Royal Varishtaa website enquiry.

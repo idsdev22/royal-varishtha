@@ -1,9 +1,10 @@
 /**
  * Royal Varishtaa Website Enquiry Integration
  *
- * Website -> Google Apps Script -> Google Sheets
- *                             -> Firebase CRM
- *                             -> Email notification
+ * Website -> Google Apps Script
+ *   -> Google Sheets
+ *   -> Firebase CRM
+ *   -> Email notification
  */
 
 // =====================================================
@@ -17,9 +18,7 @@ const CRM_API_URL =
   "https://us-central1-karthick-crm.cloudfunctions.net/newDvmAPi";
 
 const LEAD_SOURCE = "Google Ads";
-
 const PROJECT_NAME = "Royal Varishtaa";
-
 const TIME_ZONE = "Asia/Kolkata";
 
 
@@ -38,18 +37,16 @@ function doGet() {
 
 
 // =====================================================
-// POST: PROCESS WEBSITE ENQUIRY
+// POST: PROCESS ENQUIRY
 // =====================================================
 
 function doPost(e) {
   let crmStatus = "not_attempted";
+  let crmHttpCode = null;
   let crmResponseText = "";
 
   try {
-    // -------------------------------------------------
-    // 1. Validate incoming request
-    // -------------------------------------------------
-
+    // 1. Validate request
     if (!e || !e.postData || !e.postData.contents) {
       throw new Error("Request body is empty.");
     }
@@ -80,14 +77,12 @@ function doPost(e) {
     ).trim();
 
     const pageUrl = String(
-      data.pageUrl ||
-      data.page_url ||
-      ""
+      data.pageUrl || data.page_url || ""
     ).trim();
 
-    // Fixed values for this website.
-    const projectName = PROJECT_NAME;
-    const leadSource = LEAD_SOURCE;
+    const leadSource = String(
+      data.source || data.leadSource || LEAD_SOURCE
+    ).trim();
 
     if (!name || !phone) {
       return jsonResponse({
@@ -96,10 +91,7 @@ function doPost(e) {
       });
     }
 
-    // -------------------------------------------------
     // 2. Normalize Indian mobile number
-    // -------------------------------------------------
-
     let crmPhone = phone.replace(/[\s()-]/g, "");
 
     if (/^[6-9]\d{9}$/.test(crmPhone)) {
@@ -119,62 +111,40 @@ function doPost(e) {
       "dd-MM-yyyy HH:mm:ss"
     );
 
-    // -------------------------------------------------
-    // 3. Save enquiry to Google Sheets
-    // -------------------------------------------------
-
-    const spreadsheet =
-      SpreadsheetApp.getActiveSpreadsheet();
+    // 3. Save to Google Sheets
+    const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
 
     if (!spreadsheet) {
       throw new Error(
-        "Spreadsheet not found. Open Apps Script from your Google Sheet."
+        "Spreadsheet not found. Open this script from Extensions > Apps Script inside your Google Sheet."
       );
     }
 
-    const sheet = spreadsheet.getActiveSheet();
+    // Always append to the first sheet
+    const sheet = spreadsheet.getSheets()[0] || spreadsheet.getActiveSheet();
 
-    // Property Type has been removed.
     sheet.appendRow([
       timestamp,
       name,
       crmPhone,
       city,
       leadSource,
-      projectName,
+      PROJECT_NAME,
       pageUrl
     ]);
 
-    console.log("Website enquiry saved to Google Sheets.");
+    console.log("Google Sheets save completed.");
 
-    // -------------------------------------------------
-    // 4. Prepare Firebase CRM payload
-    // -------------------------------------------------
-
+    // 4. Prepare CRM payload
     const crmPayload = {
       fullName: name,
       phoneNumber: crmPhone,
       address: address,
-      projectName: projectName,
+      projectName: PROJECT_NAME,
       leadSource: leadSource
     };
 
-    // Avoid logging the customer's phone number.
-    console.log(
-      "CRM payload: " +
-      JSON.stringify({
-        fullName: crmPayload.fullName,
-        phoneNumber: "[REDACTED]",
-        address: crmPayload.address,
-        projectName: crmPayload.projectName,
-        leadSource: crmPayload.leadSource
-      })
-    );
-
-    // -------------------------------------------------
-    // 5. Send enquiry to Firebase CRM
-    // -------------------------------------------------
-
+    // 5. Send to Firebase CRM
     try {
       const crmResponse = UrlFetchApp.fetch(
         CRM_API_URL,
@@ -186,67 +156,55 @@ function doPost(e) {
         }
       );
 
-      const httpCode = crmResponse.getResponseCode();
-
+      crmHttpCode = crmResponse.getResponseCode();
       crmResponseText = crmResponse.getContentText();
 
-      console.log("CRM HTTP status: " + httpCode);
+      console.log("CRM HTTP status: " + crmHttpCode);
+      console.log("CRM response: " + crmResponseText);
 
-      if (httpCode >= 200 && httpCode < 300) {
-        let responseData = null;
-
-        try {
-          responseData = JSON.parse(crmResponseText);
-        } catch (parseError) {
-          responseData = null;
-        }
-
-        if (
-          responseData &&
-          (
-            responseData.status === "error" ||
-            responseData.success === false
-          )
-        ) {
-          crmStatus = "failed";
-        } else if (
-          crmResponseText.indexOf(
-            "Data saved successfully with ID:"
-          ) !== -1
-        ) {
-          crmStatus = "success";
-        } else {
-          crmStatus = "http_success_unverified";
-        }
-      } else {
-        crmStatus = "failed";
+      let responseData = null;
+      try {
+        responseData = JSON.parse(crmResponseText);
+      } catch (parseError) {
+        responseData = null;
       }
 
-    } catch (apiError) {
-      crmStatus = "failed";
-      crmResponseText = String(apiError);
+      if (crmHttpCode < 200 || crmHttpCode >= 300) {
+        crmStatus = "failed";
+      } else if (
+        responseData &&
+        (responseData.status === "error" || responseData.success === false)
+      ) {
+        crmStatus = "failed";
+      } else if (
+        crmResponseText.indexOf("Data saved successfully with ID:") !== -1
+      ) {
+        crmStatus = "success";
+      } else {
+        crmStatus = "http_success_unverified";
+      }
 
-      console.error(
-        "Firebase CRM request failed: " + crmResponseText
-      );
+    } catch (crmError) {
+      crmStatus = "failed";
+      crmResponseText = String(crmError);
+
+      console.error("CRM request failed: " + crmResponseText);
     }
 
-    // -------------------------------------------------
     // 6. Send email notification
-    // -------------------------------------------------
-
     try {
       const emailBody = [
         "New Royal Varishtaa Website Enquiry",
         "",
         "Lead Source: " + leadSource,
-        "Project: " + projectName,
+        "Project: " + PROJECT_NAME,
         "Name: " + name,
         "Phone: " + crmPhone,
         "City: " + (city || "N/A"),
         "Address: " + address,
         "Received At: " + timestamp,
         "CRM Sync Status: " + crmStatus,
+        "CRM HTTP Status: " + (crmHttpCode || "Unavailable"),
         "CRM Response: " + crmResponseText,
         "Website Page: " + (pageUrl || "N/A")
       ].join("\n");
@@ -265,27 +223,26 @@ function doPost(e) {
       );
     }
 
-    // -------------------------------------------------
-    // 7. Return processing result
-    // -------------------------------------------------
-
+    // 7. Return result
     return jsonResponse({
       status: "success",
       message: "Enquiry processed.",
       projectName: PROJECT_NAME,
-      leadSource: LEAD_SOURCE,
-      crmStatus: crmStatus
+      leadSource: leadSource,
+      crmStatus: crmStatus,
+      crmHttpCode: crmHttpCode,
+      crmError: crmResponseText
     });
 
   } catch (error) {
-    console.error(
-      "Enquiry processing failed: " + String(error)
-    );
+    console.error("Enquiry failed: " + String(error));
 
     return jsonResponse({
       status: "error",
       message: String(error),
-      crmStatus: crmStatus
+      crmStatus: crmStatus,
+      crmHttpCode: crmHttpCode,
+      crmError: crmResponseText || String(error)
     });
   }
 }
@@ -301,3 +258,54 @@ function jsonResponse(data) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
+
+// =====================================================
+// STANDALONE TEST FUNCTION (RUN IN EDITOR TO AUTHORIZE)
+// =====================================================
+/**
+ * CRITICAL STEP:
+ * 1. Open your Apps Script editor.
+ * 2. Select 'testCRMIntegration' in the function dropdown at top.
+ * 3. Click 'Run'.
+ * 4. Google will ask for 'Authorization Required'. Click 'Review permissions'
+ *    and grant access so UrlFetchApp can send requests to external URLs.
+ */
+function testCRMIntegration() {
+  const testPayload = {
+    fullName: "Test Lead Verification",
+    phoneNumber: "+919876543210",
+    address: "Bangalore",
+    projectName: PROJECT_NAME,
+    leadSource: LEAD_SOURCE
+  };
+
+  Logger.log("Testing CRM URL: " + CRM_API_URL);
+  Logger.log("Sending payload: " + JSON.stringify(testPayload));
+
+  try {
+    const response = UrlFetchApp.fetch(CRM_API_URL, {
+      method: "post",
+      contentType: "application/json",
+      payload: JSON.stringify(testPayload),
+      muteHttpExceptions: true
+    });
+
+    const statusCode = response.getResponseCode();
+    const responseText = response.getContentText();
+
+    Logger.log("CRM Status Code: " + statusCode);
+    Logger.log("CRM Response: " + responseText);
+
+    return {
+      success: statusCode >= 200 && statusCode < 300,
+      statusCode: statusCode,
+      response: responseText
+    };
+  } catch (err) {
+    Logger.log("CRM Fetch Exception: " + err);
+    return {
+      success: false,
+      error: String(err)
+    };
+  }
+}
