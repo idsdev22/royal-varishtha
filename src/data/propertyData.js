@@ -29,7 +29,7 @@ export const propertyData = {
     hero: img2,
     amenities: [img1, img3, img4, img5, img6, img7, img8, img9],
     gallery: [
-      img1, img2, img3, img4, img5, img6, img7, img8,
+      img3, img4, img5, img6, img7, img8,
       img9, img10, img11, img12, img13, img14, img15, img16, img17
     ]
   },
@@ -265,8 +265,6 @@ export const propertyData = {
 
   // --- FULL GALLERY ITEMS (Pure Clean Images with no heavy text overlays) ---
   galleryImages: [
-    { id: 1, image: img1, title: "Grand Entrance Archway" },
-    { id: 2, image: img2, title: "Aerial Community Layout" },
     { id: 3, image: img3, title: "Royal Manor Clubhouse" },
     { id: 4, image: img4, title: "Resort Swimming Pool" },
     { id: 5, image: img5, title: "Lush Central Park & Boulevards" },
