@@ -29,7 +29,7 @@ export const propertyData = {
     hero: img2,
     amenities: [img1, img3, img4, img5, img6, img7, img8, img9],
     gallery: [
-      img3, img4, img5, img6, img7, img8,
+      img3, img5, img6, img7, img8,
       img9, img10, img11, img12, img13, img14, img15, img16, img17
     ]
   },
@@ -266,7 +266,6 @@ export const propertyData = {
   // --- FULL GALLERY ITEMS (Pure Clean Images with no heavy text overlays) ---
   galleryImages: [
     { id: 3, image: img3, title: "Royal Manor Clubhouse" },
-    { id: 4, image: img4, title: "Resort Swimming Pool" },
     { id: 5, image: img5, title: "Lush Central Park & Boulevards" },
     { id: 6, image: img6, title: "Modern Fitness Studio" },
     { id: 7, image: img7, title: "Multi-Sport Recreation Arena" },
