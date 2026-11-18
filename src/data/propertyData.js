@@ -50,9 +50,9 @@ export const propertyData = {
     priceStartingPlot: "₹18.5 Lakhs* / Cent",
     marketPrice: "₹25 Lakhs* / Cent",
     priceStartingVilla: "₹58.5 Lakhs*",
-    totalArea: "12.5 Acres",
+    totalArea: "7 Acres",
     totalUnits: "180+ Premium Plots",
-    plotSizesRange: "1.5 Cents to 6.0 Cents",
+    plotSizesRange: "Starts from 3 Cents",
     communityType: "100% Gated Plotted Community with Amenities",
     possession: "Ready for Registration & Immediate Construction",
     phone: "+918988982030",
@@ -77,26 +77,26 @@ export const propertyData = {
     marketPricePerCent: "25L",
     preLaunchPricePerCent: "18.5L",
     transitHighlights: [
-      { time: "5 MINS", place: "KUMARAN HOSPITAL", icon: "Hospital" },
-      { time: "5-10 MINS", place: "KUMARAGURU COLLEGE", icon: "GraduationCap" },
-      { time: "10-15 MINS", place: "CHIL SEZ IT PARK", icon: "Briefcase" },
-      { time: "10-15 MINS", place: "COIMBATORE AIRPORT", icon: "Plane" }
+      { time: "200 MTRS", place: "ADITHYA COLLEGE", icon: "GraduationCap" },
+      { time: "2.5 KMS", place: "KUMARAN MEDICAL CENTER", icon: "Hospital" },
+      { time: "3.5 KMS", place: "SVB TECH PARK", icon: "Briefcase" },
+      { time: "11 KM", place: "COIMBATORE AIRPORT", icon: "Plane" }
     ],
     quickBadges: [
       "100% DTCP Approved",
       "Gated Community with Clubhouse",
       "Underground Drainage & Water",
-      "Close to IT Hub & KCT"
+      "Close to Adithya College & IT Parks"
     ]
   },
 
   // --- QUICK KEY METRICS COUNTER ---
   keyStats: [
-    { label: "Total Land Area", value: "12.5", unit: "Acres", icon: "LandPlot" },
+    { label: "Total Land Area", value: "7", unit: "Acres", icon: "LandPlot" },
     { label: "Exclusive Plots", value: "180+", unit: "Units", icon: "Home" },
     { label: "Green Open Space", value: "40", unit: "%", icon: "Trees" },
     { label: "Lifestyle Amenities", value: "30", unit: "+", icon: "Sparkles" },
-    { label: "To IT Park", value: "10", unit: "Mins", icon: "Building2" }
+    { label: "To SVB Tech Park", value: "3.5", unit: "Kms", icon: "Building2" }
   ],
 
   // --- PROJECT OVERVIEW SECTION ---
@@ -118,17 +118,6 @@ export const propertyData = {
 
   // --- PLOT CONFIGURATIONS & PRICING ---
   configurations: [
-    {
-      id: "plot-1-5",
-      type: "Compact Villa Plot",
-      cent: "1.50 Cents",
-      sqft: "653 Sq.Ft.",
-      dimension: "25' × 26'",
-      idealFor: "Modern 2 BHK Independent Villa",
-      price: "₹27.75 Lakhs*",
-      status: "Fast Selling",
-      features: ["East / North Facing", "Direct Road Access", "100% Vasthu", "Immediate Registration"]
-    },
     {
       id: "plot-3-0",
       type: "Classic Villa Plot",
@@ -226,28 +215,19 @@ export const propertyData = {
     }
   ],
 
-  // --- NEARBY CONNECTIVITY WITH KMS & TIME DETAILS (Kurumbapalayam / Sathy Road Corridor) ---
+  // --- NEARBY CONNECTIVITY WITH KMS & DISTANCE DETAILS (Kurumbapalayam / Sathy Road Corridor) ---
   nearbyLocations: {
-    title: "Strategic Kurumbapalayam Location Advantage",
+    title: "Location & Nearby Highlights",
     subtitle: "HIGH-GROWTH NORTH COIMBATORE CORRIDOR",
     description: "Situated in Kurumbapalayam near Sathy Road and Saravanampatti IT corridor, Royal Varishtaa places premier educational institutes, healthcare centres, tech parks, and transit hubs minutes away.",
     categories: [
       {
-        id: "schools",
-        name: "Schools",
-        icon: "School",
-        items: [
-          { name: "KV Matriculation Higher Secondary School", distance: "2 km", time: "5 Mins", landmark: "School" },
-          { name: "Adithya Public Matriculation School", distance: "3 km", time: "8 Mins", landmark: "School" }
-        ]
-      },
-      {
-        id: "colleges",
-        name: "Colleges",
+        id: "education",
+        name: "Schools & Colleges",
         icon: "GraduationCap",
         items: [
-          { name: "Info College of Engineering", distance: "3.5 km", time: "10 Mins", landmark: "College" },
-          { name: "Aditya College of Arts and Science", distance: "6 km", time: "15 Mins", landmark: "College" }
+          { name: "Adithya College", distance: "200 mtrs", landmark: "College" },
+          { name: "Indian Public School", distance: "2 km", landmark: "School" }
         ]
       },
       {
@@ -255,24 +235,29 @@ export const propertyData = {
         name: "Hospitals",
         icon: "Cross",
         items: [
-          { name: "KMCH Kovilpalayam", distance: "2 km", time: "5 Mins", landmark: "Hospital" },
-          { name: "Kumaran Medical Center", distance: "2.8 km", time: "7 Mins", landmark: "Hospital" }
+          { name: "Kumaran Medical Center", distance: "2.5 kms", landmark: "Hospital" },
+          { name: "KMCH", distance: "3.5 kms", landmark: "Hospital" }
         ]
       },
       {
-        id: "shopping",
-        name: "Shopping Mall",
-        icon: "ShoppingBag",
+        id: "it_parks",
+        name: "IT & Tech Parks",
+        icon: "Building2",
         items: [
-          { name: "Prozone Mall", distance: "8 km", time: "20 Mins", landmark: "Shopping Mall" }
+          { name: "SVB Tech Park", distance: "3.5 kms", landmark: "Tech Park" },
+          { name: "SEZ IT Park", distance: "9 km", landmark: "IT Park" }
         ]
       },
       {
-        id: "transit",
-        name: "Airport",
-        icon: "Plane",
+        id: "connectivity",
+        name: "Key Localities & Airport",
+        icon: "Navigation",
+        wide: true,
         items: [
-          { name: "Coimbatore International Airport", distance: "12 km", time: "25 Mins", landmark: "Airport" }
+          { name: "Kalapatti", distance: "5 km", landmark: "Locality" },
+          { name: "Saravanampatti", distance: "6 km", landmark: "Locality" },
+          { name: "Vilankurichi", distance: "7 km", landmark: "Locality" },
+          { name: "Airport", distance: "11 km", landmark: "Airport" }
         ]
       }
     ]
@@ -298,6 +283,24 @@ export const propertyData = {
     { id: 16, image: img16, title: "Scenic Sunset Boulevard" },
     { id: 17, image: img17, title: "Gated Enclave Night Illumination" }
   ],
+
+  // --- PROJECT VIDEOS (YOUTUBE & INSTAGRAM REEL) ---
+  videos: {
+    youtube: {
+      id: "QuGxih-2l_8",
+      title: "Royal Varishtaa — Project Walkthrough",
+      subtitle: "Take a full video tour of our 7-acre DTCP approved gated community at Kurumbapalayam, Coimbatore.",
+      url: "https://youtu.be/QuGxih-2l_8?si=iVqH2SKwgXWwEjcm",
+      embedUrl: "https://www.youtube.com/embed/QuGxih-2l_8?rel=0&modestbranding=1"
+    },
+    instagram: {
+      id: "DfRNYLuhROG",
+      title: "Royal Varishtaa — Site Reel",
+      subtitle: "Quick highlights from our site & neighbourhood",
+      url: "https://www.instagram.com/reel/DfRNYLuhROG/?knvt=NmczbGdndzg3N2pz",
+      embedUrl: "https://www.instagram.com/reel/DfRNYLuhROG/embed/"
+    }
+  },
 
   // --- INFRASTRUCTURE & COMFORT HIGHLIGHTS ---
   infrastructurePoints: [
@@ -327,7 +330,7 @@ export const propertyData = {
   faqs: [
     {
       q: "Where is Royal Varishtaa located and how is the connectivity?",
-      a: "Royal Varishtaa is located in Kurumbapalayam, Coimbatore, just 5 minutes from Kumaran Hospital, 8 minutes from Kumaraguru College, and 10-15 minutes from CHIL SEZ IT Park and Coimbatore International Airport."
+      a: "Royal Varishtaa is located in Kurumbapalayam, Coimbatore, just 200 mtrs from Adithya College, 2 km from Indian Public School, 2.5 kms from Kumaran Medical Center, 3.5 kms from SVB Tech Park and KMCH, 9 km from SEZ IT Park, and 11 km from Coimbatore Airport."
     },
     {
       q: "What approvals does the project have?",
@@ -335,7 +338,7 @@ export const propertyData = {
     },
     {
       q: "What plot sizes and villa configurations are available?",
-      a: "Plot sizes range from 1.50 Cents (approx 653 sq.ft.) up to 6.00 Cents (approx 2,613 sq.ft.). Turnkey custom construction is also available."
+      a: "Plot sizes start from 3 Cents (approx 1,306 sq.ft.) onwards. Turnkey custom construction is also available."
     },
     {
       q: "Are bank loans available for purchasing plots in Royal Varishtaa?",

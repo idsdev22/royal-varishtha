@@ -7,8 +7,8 @@ export const ProjectOverview = ({ onOpenEnquiry }) => {
 
   const quickFeatures = [
     { label: "DTCP & RERA Approved Layout", icon: ShieldCheck },
-    { label: "12.5 Acres Gated Plotted Community", icon: Trees },
-    { label: "Plot Sizes: 1.5 Cents to 6.0 Cents", icon: Award },
+    { label: `${projectInfo.totalArea} Gated Plotted Community`, icon: Trees },
+    { label: `Plot Sizes: ${projectInfo.plotSizesRange}`, icon: Award },
     { label: "40ft & 30ft Cambered Tar Roads", icon: CheckCircle2 },
     { label: "100% Underground Electricity & Water", icon: CheckCircle2 },
     { label: "Ready for Immediate Registration", icon: Calendar }

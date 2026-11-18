@@ -3,6 +3,7 @@ import { HeroBanner } from './components/HeroBanner';
 import { ProjectOverview } from './components/ProjectOverview';
 import { Amenities } from './components/Amenities';
 import { MasterPlanGallery } from './components/MasterPlanGallery';
+import { VideoShowcase } from './components/VideoShowcase';
 import { NearbyConnectivity } from './components/NearbyConnectivity';
 import { StickyActions } from './components/StickyActions';
 import { EnquiryModal } from './components/EnquiryModal';
@@ -48,6 +49,11 @@ function App() {
         {/* Master Plan & Visual Showcase Gallery */}
         <MasterPlanGallery
           onOpenEnquiry={() => handleOpenEnquiry({ title: 'Gallery Layout Enquiry' })}
+        />
+
+        {/* Video Walkthrough & Instagram Reel Showcase */}
+        <VideoShowcase
+          onOpenEnquiry={() => handleOpenEnquiry({ title: 'Video Tour Enquiry' })}
         />
 
         {/* Location Advantage & Strategic Distances */}

@@ -5,18 +5,21 @@ import {
   Cross,
   ShoppingBag,
   Plane,
+  Building2,
   MapPin,
   Clock,
-  Sparkles,
   ExternalLink,
   Navigation
 } from 'lucide-react';
 import { propertyData } from '../data/propertyData';
 
 const categoryIconMap = {
+  education: GraduationCap,
   schools: School,
   colleges: GraduationCap,
   hospitals: Cross,
+  it_parks: Building2,
+  connectivity: Navigation,
   shopping: ShoppingBag,
   transit: Plane
 };
@@ -29,11 +32,10 @@ export const NearbyConnectivity = ({ onOpenEnquiry }) => {
       <div className="container">
         <div className="section-header">
           <div className="section-tag">
-            {/* <Sparkles size={13} /> */}
-            <span>Strategic Location</span>
+            <span>Location &amp; Nearby Highlights</span>
           </div>
           <h2 className="section-title">
-            Prime Connectivity &amp; <span className="text-emerald">Key Distances</span>
+            Location &amp; <span className="text-emerald">Nearby Highlights</span>
           </h2>
           <p className="section-description">
             {nearbyLocations.description || "Situated in Kurumbapalayam near Sathy Road, Royal Varishtaa places premier schools, colleges, IT corridors, and transit within comfortable reach."}
@@ -44,7 +46,10 @@ export const NearbyConnectivity = ({ onOpenEnquiry }) => {
           {nearbyLocations.categories.map((category) => {
             const CatIcon = categoryIconMap[category.id] || MapPin;
             return (
-              <div key={category.id} className="nearby-category-card">
+              <div
+                key={category.id}
+                className={`nearby-category-card${category.wide ? ' nearby-category-card--wide' : ''}`}
+              >
                 <div className="category-header-wrap">
                   <div className="category-icon-box">
                     <CatIcon size={20} className="cat-icon" />
@@ -64,10 +69,12 @@ export const NearbyConnectivity = ({ onOpenEnquiry }) => {
                           <MapPin size={12} />
                           <span>{item.distance}</span>
                         </div>
-                        <div className="metric-pill metric-time">
-                          <Clock size={12} />
-                          <span>{item.time}</span>
-                        </div>
+                        {item.time && (
+                          <div className="metric-pill metric-time">
+                            <Clock size={12} />
+                            <span>{item.time}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}

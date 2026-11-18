@@ -17,7 +17,7 @@ export const Configurations = ({ onSelectPlot }) => {
             Tailored Configurations For <span className="text-burgundy">Every Lifestyle</span>
           </h2>
           <p className="section-description">
-            Choose from a diverse selection of DTCP & RERA approved premium villa plots ranging from 1.47 Cents to 5.50 Cents, designed for maximum space efficiency and Vasthu compliance.
+            Choose from a diverse selection of DTCP &amp; RERA approved premium villa plots starting from 3 Cents, designed for maximum space efficiency and Vasthu compliance.
           </p>
         </div>
 
