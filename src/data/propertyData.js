@@ -289,7 +289,7 @@ export const propertyData = {
       title: "Royal Varishtaa — Project Walkthrough",
       subtitle: "Take a full video tour of our 7-acre DTCP approved gated community at Kurumbapalayam, Coimbatore.",
       url: "https://youtu.be/QuGxih-2l_8?si=iVqH2SKwgXWwEjcm",
-      embedUrl: "https://www.youtube.com/embed/QuGxih-2l_8?rel=0&modestbranding=1"
+      embedUrl: "https://www.youtube.com/embed/QuGxih-2l_8?rel=0&playsinline=1&modestbranding=1"
     },
     instagram: {
       id: "DfRNYLuhROG",

@@ -2,14 +2,26 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Play, ExternalLink, MessageSquare, Film, Sparkles } from 'lucide-react';
 import { propertyData } from '../data/propertyData';
 
-const INSTAGRAM_MIN_WIDTH = 328;
 const DEFAULT_REEL_HEIGHT = 620;
+
+const getFallbackReelHeight = (width) => {
+  if (!width || width <= 0) return DEFAULT_REEL_HEIGHT;
+  // Instagram embed header (~56px) + portrait video area (~1.45x width) + footer (~84px)
+  return Math.max(540, Math.min(720, Math.round(width * 1.45 + 140)));
+};
+
+const ensurePlaysInline = (embedUrl) => {
+  if (!embedUrl) return embedUrl;
+  if (embedUrl.includes('playsinline=')) return embedUrl;
+  const separator = embedUrl.includes('?') ? '&' : '?';
+  return `${embedUrl}${separator}playsinline=1`;
+};
 
 export const VideoShowcase = ({ onOpenEnquiry }) => {
   const { videos, projectInfo } = propertyData;
   const reelWrapRef = useRef(null);
+  const hasMeasuredRef = useRef(false);
   const [reelHeight, setReelHeight] = useState(DEFAULT_REEL_HEIGHT);
-  const [reelWrapWidth, setReelWrapWidth] = useState(0);
 
   // Auto-sync Instagram embed iframe height from Instagram's MEASURE postMessage
   useEffect(() => {
@@ -18,7 +30,8 @@ export const VideoShowcase = ({ onOpenEnquiry }) => {
       try {
         const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
         if (data?.type === 'MEASURE' && typeof data?.details?.height === 'number') {
-          const clamped = Math.max(480, Math.min(780, Math.ceil(data.details.height)));
+          hasMeasuredRef.current = true;
+          const clamped = Math.max(520, Math.min(820, Math.ceil(data.details.height)));
           setReelHeight(clamped);
         }
       } catch {
@@ -30,34 +43,32 @@ export const VideoShowcase = ({ onOpenEnquiry }) => {
     return () => window.removeEventListener('message', handleMessage);
   }, []);
 
-  // Measure Reel container width so ultra-narrow mobile screens (<328px) scale cleanly without clipping
+  // Keep a responsive height before Instagram's MEASURE arrives (no CSS transform scaling)
   useEffect(() => {
     const el = reelWrapRef.current;
     if (!el) return;
 
-    const updateWidth = () => {
-      setReelWrapWidth(el.clientWidth);
+    const updateFallbackHeight = () => {
+      if (!hasMeasuredRef.current && el.clientWidth > 0) {
+        setReelHeight(getFallbackReelHeight(el.clientWidth));
+      }
     };
-    updateWidth();
+    updateFallbackHeight();
 
     if (typeof ResizeObserver !== 'undefined') {
-      const observer = new ResizeObserver(updateWidth);
+      const observer = new ResizeObserver(updateFallbackHeight);
       observer.observe(el);
       return () => observer.disconnect();
     }
 
-    window.addEventListener('resize', updateWidth);
-    return () => window.removeEventListener('resize', updateWidth);
+    window.addEventListener('resize', updateFallbackHeight);
+    return () => window.removeEventListener('resize', updateFallbackHeight);
   }, []);
 
   if (!videos) return null;
 
   const { youtube, instagram } = videos;
-  const reelScale =
-    reelWrapWidth > 0 && reelWrapWidth < INSTAGRAM_MIN_WIDTH
-      ? reelWrapWidth / INSTAGRAM_MIN_WIDTH
-      : 1;
-  const scaledHeight = Math.round(reelHeight * reelScale);
+  const youtubeEmbedSrc = youtube ? ensurePlaysInline(youtube.embedUrl) : '';
 
   return (
     <section className="section video-showcase-section" id="videos">
@@ -97,13 +108,12 @@ export const VideoShowcase = ({ onOpenEnquiry }) => {
 
               <div className="youtube-player-wrap">
                 <iframe
-                  src={youtube.embedUrl}
+                  src={youtubeEmbedSrc}
                   title={youtube.title}
                   className="youtube-iframe"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                   referrerPolicy="strict-origin-when-cross-origin"
                   allowFullScreen
-                  loading="lazy"
                 />
               </div>
 
@@ -153,30 +163,30 @@ export const VideoShowcase = ({ onOpenEnquiry }) => {
               <div
                 ref={reelWrapRef}
                 className="instagram-player-wrap"
-                style={{ height: `${scaledHeight}px` }}
+                style={{ height: `${reelHeight}px` }}
               >
                 <iframe
                   src={instagram.embedUrl}
                   title={instagram.title}
                   className="instagram-iframe"
-                  style={
-                    reelScale < 1
-                      ? {
-                          width: `${INSTAGRAM_MIN_WIDTH}px`,
-                          height: `${reelHeight}px`,
-                          transform: `scale(${reelScale})`,
-                          transformOrigin: 'top left'
-                        }
-                      : {
-                          width: '100%',
-                          height: `${reelHeight}px`
-                        }
-                  }
-                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen"
+                  referrerPolicy="strict-origin-when-cross-origin"
                   allowFullScreen
                   scrolling="no"
-                  loading="lazy"
                 />
+              </div>
+
+              <div className="instagram-card-footer">
+                <a
+                  href={instagram.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-instagram-watch"
+                >
+                  <Play size={14} fill="currentColor" />
+                  <span>Watch Reel on Instagram</span>
+                  <ExternalLink size={13} />
+                </a>
               </div>
             </div>
           )}

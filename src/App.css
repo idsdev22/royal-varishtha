@@ -1106,7 +1106,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+  min-width: 0;
+  transition: box-shadow 0.28s ease, border-color 0.28s ease;
 }
 
 .video-card:hover {
@@ -1166,15 +1167,21 @@
 .youtube-player-wrap {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 0;
+  padding-top: 56.25%;
   background: #09111e;
+  overflow: hidden;
 }
 
 .youtube-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   border: 0;
   display: block;
+  pointer-events: auto;
 }
 
 .video-card-footer {
@@ -1231,20 +1238,56 @@
 .instagram-player-wrap {
   position: relative;
   width: 100%;
+  min-height: 520px;
   overflow: hidden;
   background: #ffffff;
   transition: height 0.2s ease;
 }
 
 .instagram-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   border: 0;
   display: block;
   background: transparent;
+  pointer-events: auto;
+}
+
+.instagram-card-footer {
+  padding: 14px 16px;
+  background: #f8fafc;
+  border-top: 1px solid var(--border-color);
+}
+
+.btn-instagram-watch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, #c13584 0%, #833ab4 100%);
+  color: #ffffff;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: opacity 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 6px 16px rgba(193, 53, 132, 0.24);
+}
+
+.btn-instagram-watch:hover {
+  opacity: 0.94;
+  box-shadow: 0 8px 20px rgba(193, 53, 132, 0.34);
 }
 
 @media (max-width: 960px) {
   .video-showcase-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 22px;
     justify-items: center;
   }
@@ -1254,7 +1297,7 @@
   }
 
   .video-card-instagram {
-    max-width: 360px;
+    max-width: 400px;
     margin: 0 auto;
   }
 }
@@ -1294,7 +1337,7 @@
   }
 
   .video-card-instagram {
-    max-width: 356px;
+    max-width: 100%;
   }
 }
 
